@@ -1,5 +1,3 @@
-import { useEffect, useRef } from 'react';
-
 // Web Audio API bağlamı
 let audioContext: AudioContext | null = null;
 

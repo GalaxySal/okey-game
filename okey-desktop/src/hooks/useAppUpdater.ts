@@ -32,27 +32,43 @@ export const useAppUpdater = () => {
     try {
       setUpdateStatus({ status: 'checking' });
 
-      // Şimdilik simüle edilmiş güncelleme kontrolü
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // GitHub Releases API'sini kullan
+      const response = await fetch('https://api.github.com/repos/GalaxySal/okey-game/releases/latest');
 
-      const currentVersion = '0.2.0';
-      const latestVersion = '0.2.1'; // Test için daha yeni versiyon simüle ediyoruz
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
 
-      // Test için her zaman güncelleme var gibi davran
-      const hasUpdate = true; // Test için true
+      const release = await response.json();
+
+      // Mevcut sürümü package.json'dan al
+      const currentVersionResponse = await fetch('/package.json');
+      const packageJson = await currentVersionResponse.json();
+      const currentVersion = packageJson.version || '0.2.0';
+
+      const latestVersion = release.tag_name.replace('v', ''); // 'v1.0.0' -> '1.0.0'
+
+      console.log(`Current: ${currentVersion}, Latest: ${latestVersion}`);
+
+      // Sürüm karşılaştırması (basit string karşılaştırma)
+      const hasUpdate = latestVersion > currentVersion;
 
       if (hasUpdate) {
+        // Assets içinden .exe dosyasını bul
+        const exeAsset = release.assets.find((asset: any) =>
+          asset.name.endsWith('.exe') || asset.name.includes('okey-game')
+        );
+
         setUpdateInfo({
           available: true,
           currentVersion,
           latestVersion,
-          releaseNotes: '🎮 Yeni özellikler: Gelişmiş AI, yeni animasyonlar ve performans iyileştirmeleri!\n🐛 Hata düzeltmeleri: Oyun stabilitesi artırıldı.',
-          downloadSize: '~12 MB',
-          downloadUrl: 'https://github.com/nazimpala/okey-game/releases/download/v0.2.1/okey-game_0.2.1.exe'
+          releaseNotes: release.body || 'Yeni sürüm mevcut! Gelişmiş özellikler ve hata düzeltmeleri içeriyor.',
+          downloadSize: exeAsset ? `~${Math.round(exeAsset.size / (1024 * 1024))} MB` : 'Bilinmiyor',
+          downloadUrl: exeAsset ? exeAsset.browser_download_url : release.html_url
         });
 
         setUpdateStatus({ status: 'idle' });
-        // OTOMATİK GÖSTER - Güncelleme varsa hemen dialog göster
         setShowUpdateDialog(true);
       } else {
         setUpdateInfo({
@@ -70,6 +86,13 @@ export const useAppUpdater = () => {
         status: 'error',
         error: 'Güncelleme kontrolü başarısız oldu'
       });
+
+      // Hata durumunda varsayılan değerleri kullan
+      setUpdateInfo({
+        available: false,
+        currentVersion: '0.2.0',
+        latestVersion: '0.2.0'
+      });
     }
   };
 
@@ -77,21 +100,28 @@ export const useAppUpdater = () => {
     try {
       setUpdateStatus({ status: 'downloading', progress: 0 });
 
-      // Simüle edilmiş indirme süreci
-      for (let i = 0; i <= 100; i += 10) {
-        await new Promise(resolve => setTimeout(resolve, 150));
-        setUpdateStatus({ status: 'downloading', progress: i });
+      // Tauri updater kullanarak gerçek güncelleme
+      const { check } = await import('@tauri-apps/plugin-updater');
+
+      // Güncelleme kontrolü ve yükleme
+      const update = await check();
+
+      if (update?.available) {
+        // İndirme ve yükleme
+        await update.downloadAndInstall();
+
+        // Güncelleme tamamlandı bilgisi
+        console.log('Güncelleme başarıyla yüklendi!');
+
+        // Uygulamayı yeniden başlatmak için kullanıcıya bilgi ver
+        if (confirm('Güncelleme yüklendi. Uygulama yeniden başlatılacak. Devam etmek istiyor musunuz?')) {
+          const { relaunch } = await import('@tauri-apps/plugin-process');
+          await relaunch();
+        }
+      } else {
+        console.log('Güncelleme bulunamadı veya zaten güncel');
+        setUpdateStatus({ status: 'idle' });
       }
-
-      setUpdateStatus({ status: 'ready' });
-      setShowUpdateDialog(false);
-
-      // Simülasyon tamamlandı bilgisi
-      console.log('Güncelleme simülasyonu tamamlandı!');
-
-      // Gerçek güncelleme sistemi için Tauri updater kullanılacak
-      // const { downloadAndInstall } = await import('@tauri-apps/plugin-updater');
-      // await downloadAndInstall();
 
     } catch (error) {
       console.error('Güncelleme yükleme başarısız:', error);
