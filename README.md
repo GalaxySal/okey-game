@@ -173,7 +173,7 @@ Katkılarınızı bekliyoruz! Lütfen şu adımları takip edin:
 - ✅ Gelişmiş skor ve istatistik sistemi
 - ✅ TypeScript 5.9.3 ve React 19.2.0 güncellemeleri
 
-### v0.1.0 - 2024
+### v0.1.0 - 2025
 
 #### Web Sürümü
 
