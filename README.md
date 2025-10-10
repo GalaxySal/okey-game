@@ -52,7 +52,7 @@
 
 #### Erişim
 
-[Web Demo](https://galaxysal.github.io/okey-game/) adresini ziyaret edin ve "Yeni Oyun Başlat" butonuna tıklayın.
+Web uygulaması henüz geliştirme aşamasındadır. GitHub Pages üzerinden yayınlandığında buradan erişebilirsiniz.
 
 ## 🎮 Oyun Kuralları
 
