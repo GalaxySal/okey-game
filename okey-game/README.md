@@ -1,73 +1,159 @@
-# React + TypeScript + Vite
+# 🌐 Okey Oyunu - Web Uygulaması
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 🇹🇷 **Türkçe Klasik Okey Oyunu Web Sürümü** - Tarayıcıda okey oynayın!
 
-Currently, two official plugins are available:
+## 🌟 Özellikler
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🎯 Oyun Özellikleri
 
-## React Compiler
+- **🎲 Klasik Okey Kuralları** - 106 taş ile tam kurallara uygun oynanış
+- **🤖 Akıllı AI Rakipler** - Stratejik karar verme algoritması
+- **🏆 Skor Sistemi** - Detaylı oyun istatistikleri
+- **🎨 Responsive Tasarım** - Tüm ekran boyutlarında mükemmel görünüm
+- **⚡ Hızlı Performans** - Optimize kod yapısı
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 💻 Teknik Özellikler
 
-## Expanding the ESLint configuration
+- **🎵 Web Audio API** - Gerçekçi ses efektleri
+- **📱 Mobil Uyumlu** - Dokunmatik kontroller
+- **🔒 Tip Güvenliği** - TypeScript ile güçlü tip kontrolü
+- **🎨 Modern UI** - Tailwind CSS ile şık arayüz
+- **📦 Optimize Bundle** - Küçük dosya boyutu
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Kurulum ve Çalıştırma
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Gereksinimler
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Node.js 18+**
+- **npm** veya **yarn**
+- **Modern web tarayıcısı**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Kurulum
+
+```bash
+# Ana proje klasöründe
+cd okey-game
+
+# Bağımlılıkları yükle
+npm install
+
+# Geliştirme sunucusunu başlat
+npm run dev
+
+# Build üret
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Kullanım
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. **Geliştirme Sunucusu**: `npm run dev` komutu ile localhost'ta açılır
+2. **Build**: `npm run build` komutu ile `dist/` klasörüne build üretir
+3. **Preview**: `npm run preview` komutu ile build'i test edebilirsiniz
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🎮 Nasıl Oynanır?
+
+### Oyun Kuralları
+
+- **4 Oyuncu** - 1 insan, 3 AI rakip
+- **106 Taş** - Klasik okey taş seti
+- **Gösterici ve Okey** - Rastgele belirlenen özel taşlar
+- **El Bitişi** - Tüm taşları uygun şekilde gruplamak
+
+### Oyun Akışı
+
+1. **Dağıtım** - Her oyuncuya 14 taş verilir
+2. **Yer Taşları** - 8 taş ortaya açılır
+3. **Çekme Havuzu** - Kalan taşlar çekme havuzu olur
+4. **Sırayla Oynama** - Her oyuncu sırayla taş çeker/atar
+5. **Bitiş** - Çekme havuzu bittiğinde oyun otomatik biter
+
+## 📁 Proje Yapısı
+
+```plaintext
+okey-game/
+├── src/                       # Kaynak kodlar
+│   ├── components/            # React bileşenleri
+│   ├── hooks/                 # Özel React hook'ları
+│   ├── utils/                 # Yardımcı fonksiyonlar
+│   ├── types/                 # TypeScript tip tanımları
+│   ├── assets/                # Statik varlıklar
+│   └── styles/                # CSS stilleri
+├── public/                    # Public dosyalar
+├── index.html                 # Ana HTML dosyası
+├── package.json               # Proje bağımlılıkları
+├── vite.config.ts             # Vite yapılandırması
+├── tsconfig.json              # TypeScript yapılandırması
+└── tailwind.config.js         # Tailwind CSS yapılandırması
 ```
+
+## 🛠️ Geliştirme
+
+### Kullanılan Teknolojiler
+
+- **React 19.2.0** - Modern React özellikleri
+- **TypeScript 5.9.3** - Tip güvenliği
+- **Vite 7.1.9** - Hızlı build sistemi
+- **Tailwind CSS 4.1.14** - Utility-first CSS framework
+- **ESLint 8.46.0** - Kod kalitesi kontrolü
+
+### Geliştirme Komutları
+
+```bash
+# Geliştirme sunucusu
+npm run dev
+
+# Build üret
+npm run build
+
+# Preview build
+npm run preview
+
+# Lint kontrolü
+npm run lint
+
+# Type check
+npm run type-check
+```
+
+## 🤝 Katkıda Bulunma
+
+1. Bu repoyu fork edin
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Add amazing feature'`)
+4. Branch'i push edin (`git push origin feature/amazing-feature`)
+5. Pull Request açın
+
+### Katkı Kuralları
+
+- TypeScript ve ESLint kurallarına uyun
+- Responsive tasarım prensiplerini takip edin
+- Türkçe yorum yazın
+- Test yazın
+
+## 📊 Performans
+
+### Build Metrikleri
+
+- **Build Süresi**: ~1.11s
+- **Bundle Boyutu**: 204.80 kB
+- **Gzip Boyutu**: 63.93 kB
+- **Modül Sayısı**: 31 modül
+
+## 🔗 İlgili Bağlantılar
+
+- **Ana Proje**: [Okey Oyunu Ana README](../README.md)
+- **Desktop Uygulaması**: [Desktop README](../okey-desktop/README.md)
+- **Lisans**: [MIT License](../LICENSE)
+
+## 📞 Destek
+
+Herhangi bir sorun yaşarsanız:
+
+1. GitHub Issues sayfasını kullanın
+2. Sorun açıklamasını detaylı yazın
+3. Hata mesajlarını ekleyin
+4. Ekran görüntüleri ekleyin
+
+---
+
+**⭐ Eğer projeyi beğendiyseniz yıldız verin!**
