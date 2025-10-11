@@ -63,7 +63,7 @@ export const BeginMenu: React.FC<BeginMenuProps> = ({
             OKEY OYUNU
           </h1>
           <p className="text-green-200 text-lg">Türkçe Klasik Okey</p>
-          <p className="text-gray-400 text-sm mt-2">v0.1.0 - Desktop Edition</p>
+          <p className="text-gray-400 text-sm mt-2">v0.3.0 - Desktop Edition</p>
         </div>
 
         {/* Oyun Bilgileri */}

@@ -140,6 +140,11 @@ function App() {
           setShowMenu={setShowMenu}
           setGameState={setGameState}
           onExit={() => window.close()}
+          onMultiplayer={() => {
+            // Çoklu oyun için gerekli işlemler burada yapılacak
+            setShowMenu(false);
+            // TODO: Çoklu oyun lobisini göster
+          }}
         />
       )}
 
