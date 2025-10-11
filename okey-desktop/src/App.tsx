@@ -1,14 +1,17 @@
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BeginMenu } from './components/BeginMenu';
 import { TileComponent } from './components/Tile';
 import { UpdateDialog } from './components/UpdateDialog';
-import { useState, useEffect } from 'react';
 import type { Tile } from './components/Tile';
 import GameOverDialog from './components/GameOverDialog';
 import { nextPlayerTurn, drawTile, discardTile, checkForWinningHand, type GameState, processAITurns, checkForWinner, initializeScoreSystem } from './utils/gameLogic';
 import { useAppUpdater } from './hooks/useAppUpdater';
 import { GameSounds } from './components/GameSounds';
+import './i18n';
 
 function App() {
+  const { t } = useTranslation();
   const { updateInfo, updateStatus, performUpdate, dismissUpdate } = useAppUpdater();
 
   const [showMenu, setShowMenu] = useState(true);
@@ -107,23 +110,23 @@ function App() {
 
   const getPlayerName = (playerNumber: number) => {
     switch (playerNumber) {
-      case 1: return 'Sen';
-      case 2: return 'Oyuncu 2';
-      case 3: return 'Oyuncu 3';
-      case 4: return 'Oyuncu 4';
-      default: return 'Bilinmiyor';
+      case 1: return t('game.players', 'Sen');
+      case 2: return t('game.player2', 'Oyuncu 2');
+      case 3: return t('game.player3', 'Oyuncu 3');
+      case 4: return t('game.player4', 'Oyuncu 4');
+      default: return t('game.unknown', 'Bilinmiyor');
     }
   };
 
   const getTileDisplayName = (tile: Tile) => {
-    if (tile.isJoker) return 'JOKER';
-    if (tile.isOkey) return 'OKEY';
+    if (tile.isJoker) return t('game.joker', 'JOKER');
+    if (tile.isOkey) return t('game.okey', 'OKEY');
 
     const colorNames = {
-      red: 'Kırmızı',
-      black: 'Siyah',
-      yellow: 'Sarı',
-      blue: 'Mavi'
+      red: t('colors.red', 'Kırmızı'),
+      black: t('colors.black', 'Siyah'),
+      yellow: t('colors.yellow', 'Sarı'),
+      blue: t('colors.blue', 'Mavi')
     };
 
     return `${tile.value} ${colorNames[tile.color]}`;

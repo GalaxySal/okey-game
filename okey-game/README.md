@@ -7,14 +7,20 @@
 ### 🎯 Oyun Özellikleri
 
 - **🎲 Klasik Okey Kuralları** - 106 taş ile tam kurallara uygun oynanış
-- **🤖 Akıllı AI Rakipler** - Stratejik karar verme algoritması
+- **🤖 Gelişmiş AI Rakipler** - Stratejik karar verme algoritması
+- **🔊 Gerçekçi Ses Efektleri** - Web Audio API ile ses deneyimi
 - **🏆 Skor Sistemi** - Detaylı oyun istatistikleri
-- **🎨 Responsive Tasarım** - Tüm ekran boyutlarında mükemmel görünüm
-- **⚡ Hızlı Performans** - Optimize kod yapısı
+- **🌍 Çoklu Dil Desteği** - Türkçe ve İngilizce tam çeviri
+- **📱 PWA Özellikleri** - Offline oynanabilirlik
+- **🌐 Multiplayer Sistemi** - Socket.io ile gerçek zamanlı çoklu oyuncu
+- **⚙️ Ayarlar Paneli** - Cross-platform senkronizasyon
 
 ### 💻 Teknik Özellikler
 
 - **🎵 Web Audio API** - Gerçekçi ses efektleri
+- **📱 PWA Teknolojisi** - Offline oynanabilirlik ve mobil deneyim
+- **🌐 Socket.io Client** - Gerçek zamanlı çoklu oyuncu sistemi
+- **🔒 i18next** - Çoklu dil desteği ve çeviri yönetimi
 - **📱 Mobil Uyumlu** - Dokunmatik kontroller
 - **🔒 Tip Güvenliği** - TypeScript ile güçlü tip kontrolü
 - **🎨 Modern UI** - Tailwind CSS ile şık arayüz

@@ -399,6 +399,66 @@ export const chooseBestAIMove = (gameState: GameState): 'draw' | 'discard' | 'pa
 };
 
 /**
+ * Atılacak en iyi taşı seçer (gelişmiş strateji)
+ */
+const selectBestTileToDiscard = (tiles: Tile[], analysis: any, okeyInfo: any): Tile | null => {
+  if (tiles.length === 0) return null;
+
+  // Öncelik sırası:
+  // 1. Gereksiz taşları at (çok fazla olanlar)
+  // 2. Sıralı olmayan taşları at
+  // 3. Okey taşını en son at
+
+  // Çok fazla olan taşları bul (3 veya daha fazla aynı sayıdan)
+  const excessiveTiles = tiles.filter(tile => {
+    if (tile.isJoker || (okeyInfo && tile.id === okeyInfo.okeyTile.id)) return false;
+    return (analysis.pairs.find(([value, _count]: [number, number]) => value === tile.value)?.[1] || 0) > 2;
+  });
+
+  if (excessiveTiles.length > 0) {
+    return excessiveTiles[Math.floor(Math.random() * excessiveTiles.length)];
+  }
+
+  // Sıralı olmayan taşları bul
+  const colorTiles = new Map<TileColor, Tile[]>();
+  tiles.forEach(tile => {
+    if (!colorTiles.has(tile.color)) colorTiles.set(tile.color, []);
+    colorTiles.get(tile.color)!.push(tile);
+  });
+
+  const nonSequentialTiles: Tile[] = [];
+  colorTiles.forEach((colorGroup, _color) => {
+    const sorted = [...colorGroup].sort((a, b) => a.value - b.value);
+    sorted.forEach((tile, index) => {
+      if (index > 0 && tile.value !== sorted[index - 1].value + 1) {
+        // Sıralı olmayan taşları bul
+        if (!tile.isJoker && (!okeyInfo || tile.id !== okeyInfo.okeyTile.id)) {
+          nonSequentialTiles.push(tile);
+        }
+      }
+    });
+  });
+
+  if (nonSequentialTiles.length > 0) {
+    return nonSequentialTiles[Math.floor(Math.random() * nonSequentialTiles.length)];
+  }
+
+  // En düşük değerli taşı at (okey ve joker hariç)
+  const discardableTiles = tiles.filter(tile =>
+    !tile.isJoker && (!okeyInfo || tile.id !== okeyInfo.okeyTile.id)
+  );
+
+  if (discardableTiles.length > 0) {
+    return discardableTiles.reduce((min, tile) =>
+      tile.value < min.value ? tile : min
+    );
+  }
+
+  // Son çare olarak rastgele taş at
+  return tiles[Math.floor(Math.random() * tiles.length)];
+};
+
+/**
  * Daha akıllı AI hamle kararı
  */
 export const makeSmartAIMove = (gameState: GameState): GameState => {
@@ -424,16 +484,17 @@ export const makeSmartAIMove = (gameState: GameState): GameState => {
       return afterDraw;
 
     case 'discard':
-      // En kötü taşı seç ve at (basit strateji)
+      // Gelişmiş taş atma stratejisi
       if (playerTiles.length > 0) {
-        const tileToDiscard = playerTiles.reduce((worst, current) =>
-          current.value < worst.value ? current : worst
-        );
+        const analysis = analyzeHand(playerTiles);
+        const tileToDiscard = selectBestTileToDiscard(playerTiles, analysis, gameState.okeyInfo);
 
-        console.log(`AI Oyuncu ${currentPlayer} taşı atıyor: ${tileToDiscard.value} ${tileToDiscard.color}`);
-        const afterDiscard = discardTile(gameState, tileToDiscard.id);
-        console.log(`AI Oyuncu ${currentPlayer} taş attı. Yeni currentPlayer: ${afterDiscard.currentPlayer}`);
-        return afterDiscard;
+        if (tileToDiscard) {
+          console.log(`AI Oyuncu ${currentPlayer} akıllı taşı atıyor: ${tileToDiscard.value} ${tileToDiscard.color}`);
+          const afterDiscard = discardTile(gameState, tileToDiscard.id);
+          console.log(`AI Oyuncu ${currentPlayer} taş attı. Yeni currentPlayer: ${afterDiscard.currentPlayer}`);
+          return afterDiscard;
+        }
       }
       console.log(`AI Oyuncu ${currentPlayer} taş atamıyor, pas geçiyor...`);
       const afterPass = nextPlayerTurn(gameState);

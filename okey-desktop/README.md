@@ -11,7 +11,7 @@
 - **🎵 Gerçekçi Ses Efektleri** - Web Audio API ile ses deneyimi
 - **🏆 Skor Sistemi** - Detaylı oyun istatistikleri
 - **🎨 Modern UI/UX** - Yerel uygulama görünümü
-- **💾 Yerel Kayıt** - Oyun geçmişi ve ayarlar
+- **🌍 Çoklu Dil Desteği** - Türkçe ve İngilizce tam çeviri
 
 ### 💻 Teknik Özellikler
 

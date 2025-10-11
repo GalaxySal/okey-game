@@ -1,6 +1,7 @@
 # 🎮 Okey Oyunu - Türkçe Klasik Okey
 
-> 🇹🇷 **Türkçe Klasik Okey Oyunu** - Geleneksel okey kuralları ile modern teknoloji birleşiyor!
+> 🇹🇷 **Türkçe Klasik Okey Oyunu** - Geleneksel okey kuralları ile
+> modern teknoloji birleşiyor!
 
 ## 🌟 Özellikler
 
@@ -18,7 +19,7 @@
 - **🔒 Tip Güvenliği** - TypeScript ile güçlü tip kontrolü
 - **📱 Cross-Platform** - Web ve Desktop desteği
 - **🔄 Otomatik Güncelleme** - Desktop için otomatik güncelleme sistemi
-- **🌍 Çoklu Dil Desteği** - İngilizce ve diğer diller (yakında)
+- **🌍 Çoklu Dil Desteği** - Türkçe ve İngilizce tam çeviri
 
 ## 🚀 Platformlar
 
@@ -52,7 +53,22 @@
 
 #### Erişim
 
-Web uygulaması henüz geliştirme aşamasındadır. GitHub Pages üzerinden yayınlandığında buradan erişebilirsiniz.
+Web uygulaması artık kullanıma hazır! Şu şekilde erişebilirsiniz:
+
+```bash
+# Yerel geliştirme için
+npm run dev
+
+# Build için
+npm run build
+npm run preview
+```
+
+#### Yeni Özellikler
+
+- **📱 PWA Desteği** - Offline oynanabilirlik
+- **🌐 Multiplayer** - Gerçek zamanlı çoklu oyuncu
+- **⚙️ Ayarlar Paneli** - Cross-platform senkronizasyon
 
 ## 🎮 Oyun Kuralları
 
@@ -150,7 +166,8 @@ Katkılarınızı bekliyoruz! Lütfen şu adımları takip edin:
 | **Desktop** | ~1.48s | 228.20 kB | 42 modül | 69.74 kB |
 | **Web** | ~1.11s | 204.80 kB | 31 modül | 63.93 kB |
 
-> **Not:** Build süreleri yüksek performanslı geliştirme makinesinde ölçülmüştür. Sonuçlar donanıma göre değişiklik gösterebilir.
+> **Not:** Build süreleri yüksek performanslı geliştirme makinesinde
+> ölçülmüştür. Sonuçlar donanıma göre değişiklik gösterebilir.
 
 ### 🚀 Teknoloji Stack Performansı
 
@@ -162,7 +179,18 @@ Katkılarınızı bekliyoruz! Lütfen şu adımları takip edin:
 
 ## 📈 Sürüm Geçmişi
 
-### v0.2.1 (En Güncel) - 2025
+### v0.3.0 (En Güncel) - 2025-10-11
+
+#### Tüm Platformlar
+
+- ✅ **Çoklu Dil Sistemi** - Türkçe ve İngilizce tam çeviri
+- ✅ **Desktop → Web Aktarımı** - Ses efektleri ve gelişmiş UI
+- ✅ **PWA Özellikleri** - Offline oynanabilirlik ve mobil deneyim
+- ✅ **Multiplayer Sistemi** - Socket.io ile gerçek zamanlı çoklu oyuncu
+- ✅ **Gelişmiş AI Algoritmaları** - Stratejik karar verme sistemi
+- ✅ **Cross-Platform Senkronizasyon** - Tüm cihazlar arası veri eşlemesi
+
+### v0.2.1 - 2025-10-09
 
 #### Desktop Sürümü
 
@@ -184,18 +212,12 @@ Katkılarınızı bekliyoruz! Lütfen şu adımları takip edin:
 
 ### Gelecek Sürümler
 
-#### v0.3.0 (Yakında)
-
-- 🟡 Çoklu dil sistemi (İngilizce)
-- 🟡 Web platformuna desktop özellikleri aktarımı
-- 🟡 PWA (Progressive Web App) özellikleri
-
 #### v1.0.0 (Planlanan)
 
-- 🔴 Çoklu oyuncu sistemi (Socket.io)
-- 🔴 Gelişmiş AI algoritmaları
-- 🔴 Mobil uygulama (Flutter/React Native)
-- 🔴 Cross-platform senkronizasyon
+- 🔴 **Mobil Uygulama** - Flutter/React Native desteği
+- 🔴 **Gelişmiş Grafikler** - 3D taşlar ve animasyonlar
+- 🔴 **Sosyal Özellikler** - Profil sistemi ve arkadaş listesi
+- 🔴 **Turnuva Modu** - Çoklu oyun turnuvaları
 
 ---
 
@@ -211,7 +233,8 @@ Katkılarınızı bekliyoruz! Lütfen şu adımları takip edin:
 
 - **GitHub Issues** - Hata bildirimleri ve özellik istekleri için
 - **Pull Requests** - Kod katkıları için
-- **Email** - [galaxy.sal@example.com](mailto:galaxy.sal@example.com) (proje sahibi ile iletişim için)
+- **Email** - [galaxy.sal@example.com](mailto:galaxy.sal@example.com)
+  (proje sahibi ile iletişim için)
 
 ---
 
