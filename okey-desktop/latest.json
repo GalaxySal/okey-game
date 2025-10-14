@@ -1,0 +1,11 @@
+{
+  "version": "1.0.3",
+  "notes": "Yeni sürüm mevcut! Gelişmiş özellikler ve hata düzeltmeleri içeriyor.",
+  "pub_date": "2025-10-15T00:00:00Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "",
+      "url": "https://github.com/GalaxySal/okey-game/releases/download/v1.0.3/Okey_Desktop_1.0.3_x64-setup.exe"
+    }
+  }
+}

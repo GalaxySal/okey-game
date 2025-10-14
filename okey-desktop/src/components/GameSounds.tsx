@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { playTileSelectSound } from '../utils/soundEffects';
+import React from 'react';
 import type { Tile } from './Tile';
 
 interface GameSoundsProps {
@@ -9,12 +8,7 @@ interface GameSoundsProps {
 export const GameSounds: React.FC<GameSoundsProps> = ({
   selectedTile,
 }) => {
-  // Taş seçildiğinde ses efekti
-  useEffect(() => {
-    if (selectedTile) {
-      playTileSelectSound();
-    }
-  }, [selectedTile]);
-
-  return null; // Bu component sadece ses efektlerini yönetir, görünür bir şey render etmez
+  // TODO: Ses efektleri eklenecek
+  // Web Audio API şu anda çalışmıyor
+  return null;
 };

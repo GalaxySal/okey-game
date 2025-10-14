@@ -48,8 +48,17 @@ export const MultiplayerProvider: React.FC<MultiplayerProviderProps> = ({ childr
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Socket.io bağlantısı
-    const newSocket = io(import.meta.env.VITE_SOCKET_SERVER_URL || 'http://localhost:3001');
+    // Socket.io bağlantısı - Sadece backend hazır olduğunda
+    const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_SERVER_URL || 'http://localhost:3001';
+    const ENABLE_MULTIPLAYER = import.meta.env.VITE_ENABLE_MULTIPLAYER === 'true';
+
+    // Development ortamında backend yoksa bağlantıyı atla
+    if (!ENABLE_MULTIPLAYER) {
+      console.log('Multiplayer devre dışı - Backend bekleniyor');
+      return;
+    }
+
+    const newSocket = io(SOCKET_SERVER_URL);
 
     newSocket.on('connect', () => {
       setIsConnected(true);
