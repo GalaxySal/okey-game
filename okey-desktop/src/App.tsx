@@ -12,7 +12,16 @@ import { useAppUpdater } from './hooks/useAppUpdater';
 import { GameSounds } from './components/GameSounds';
 import './i18n';
 
+// İçerik komponenti - ThemeProvider içinde useTheme kullanacak
 function App() {
+  return (
+    <ThemeProvider>
+      <GameContent />
+    </ThemeProvider>
+  );
+}
+
+const GameContent: React.FC = () => {
   const { t } = useTranslation();
   const { updateInfo, updateStatus, performUpdate, dismissUpdate } = useAppUpdater();
   const { isDark } = useTheme();
@@ -136,7 +145,9 @@ function App() {
   };
 
   return (
-    <ThemeProvider>
+    <div className={`min-h-screen p-4 transition-colors duration-300 ${
+      isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-green-900 via-green-800 to-green-900'
+    }`}>
       {/* Başlangıç Menüsü */}
       {showMenu && (
         <BeginMenu
@@ -487,7 +498,7 @@ function App() {
 
       {/* Performans Monitoring - Development Only */}
       <PerformanceMonitor />
-    </ThemeProvider>
+    </div>
   );
 }
 
