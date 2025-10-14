@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useRef, useEffect } from 'react';
+import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 
 // Tile cache for performance
-const tileCache = new Map<string, any>();
+const tileCache = new Map<string, unknown>();
 
-export const useTileCache = (tileId: string, tileData: any) => {
+export const useTileCache = (tileId: string, tileData: unknown) => {
   return useMemo(() => {
     if (tileCache.has(tileId)) {
       return tileCache.get(tileId);
@@ -13,7 +13,7 @@ export const useTileCache = (tileId: string, tileData: any) => {
 
     // Cache'i belirli boyutta tutmak için cleanup
     if (tileCache.size > 1000) {
-      const firstKey = tileCache.keys().next().value;
+      const firstKey = tileCache.keys().next().value as string;
       tileCache.delete(firstKey);
     }
 
@@ -59,7 +59,13 @@ export const useDebounce = <T,>(value: T, delay: number): T => {
 
 // Performance monitoring hook with memory tracking
 export const useAdvancedPerformanceMonitor = () => {
-  const [metrics, setMetrics] = useState({
+  const [metrics, setMetrics] = useState<{
+    fps: number;
+    memoryUsage: number;
+    loadTime: number;
+    renderTime: number;
+    cacheHitRate: number;
+  }>({
     fps: 0,
     memoryUsage: 0,
     loadTime: 0,

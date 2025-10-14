@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Web Vitals monitoring for performance tracking
 export const useWebVitals = () => {
@@ -18,10 +18,14 @@ export const useWebVitals = () => {
           setMetrics(prev => ({ ...prev, lcp: entry.startTime }));
         }
         if (entry.entryType === 'first-input') {
-          setMetrics(prev => ({ ...prev, fid: (entry as any).processingStart - entry.startTime }));
+          const inputEntry = entry as PerformanceEventTiming;
+          setMetrics(prev => ({ ...prev, fid: inputEntry.processingStart - entry.startTime }));
         }
-        if (entry.entryType === 'layout-shift' && !(entry as any).hadRecentInput) {
-          setMetrics(prev => ({ ...prev, cls: prev.cls + (entry as any).value }));
+        if (entry.entryType === 'layout-shift') {
+          const layoutEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value: number };
+          if (!layoutEntry.hadRecentInput) {
+            setMetrics(prev => ({ ...prev, cls: prev.cls + layoutEntry.value }));
+          }
         }
       }
     });
@@ -52,12 +56,12 @@ export const useBundleAnalyzer = () => {
 
   useEffect(() => {
     if (window.performance.getEntriesByType) {
-      const resources = window.performance.getEntriesByType('resource');
+      const resources = window.performance.getEntriesByType('resource') as PerformanceResourceTiming[];
       let totalSize = 0;
       let largestChunk = '';
       let maxSize = 0;
 
-      resources.forEach((resource: any) => {
+      resources.forEach((resource) => {
         if (resource.name.includes('.js') || resource.name.includes('.css')) {
           totalSize += resource.transferSize || 0;
           if ((resource.transferSize || 0) > maxSize) {
@@ -69,7 +73,7 @@ export const useBundleAnalyzer = () => {
 
       setBundleInfo({
         totalSize,
-        chunkCount: resources.filter((r: any) => r.name.includes('.js')).length,
+        chunkCount: resources.filter((r) => r.name.includes('.js')).length,
         largestChunk,
         loadTime: window.performance.timing?.loadEventEnd - window.performance.timing?.navigationStart || 0,
       });

@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GameSounds } from './components/GameSounds';
+import { useWebVitals } from './hooks/useWebVitals';
+import { MultiplayerProvider } from './contexts/MultiplayerContextInternal';
+import { MultiplayerLobby } from './components/MultiplayerLobby';
+import { TileComponent } from './components/Tile';
 import type { Tile } from './components/Tile';
-import { createOkeyTileSet, distributeTiles, determineOkeyTile, shuffleTiles, nextPlayerTurn, drawTile, discardTile, checkForWinningHand, type GameState, processAITurns } from './utils/gameLogic';
+import { PerformanceMonitor } from './hooks/usePerformanceMonitor';
+import { GameSounds } from './components/GameSounds';
+import { createOkeyTileSet, distributeTiles, determineOkeyTile, shuffleTiles, nextPlayerTurn, drawTile, discardTile, checkForWinningHand, type GameState } from './utils/gameLogic';
 import './i18n';
 
 // Global tip tanımları
@@ -20,6 +25,12 @@ declare global {
 function App() {
   const { t } = useTranslation();
   const webVitals = useWebVitals();
+
+  // State variables
+  const [showMultiplayerLobby, setShowMultiplayerLobby] = useState(false);
+  const [gameMode, setGameMode] = useState<'single' | 'multiplayer'>('single');
+  const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
+  const [selectedTile, setSelectedTile] = useState<Tile | null>(null);
   const [gameState, setGameState] = useState<GameState>({
     playerTiles: [],
     otherPlayers: {
@@ -50,27 +61,19 @@ function App() {
     gameStartTime: null
   });
 
-  const [selectedTile, setSelectedTile] = useState<Tile | null>(null);
-  const [gameMode, setGameMode] = useState<'single' | 'multiplayer'>('single');
-  const [showMultiplayerLobby, setShowMultiplayerLobby] = useState(false);
-  const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
-
   // Oyunu başlat
   useEffect(() => {
     startNewGame();
   }, []);
 
+  // Game functions
   const startNewGame = () => {
-    // Taşları oluştur ve karıştır
-    const tiles = shuffleTiles(createOkeyTileSet());
+    const tiles = createOkeyTileSet();
+    const shuffledTiles = shuffleTiles(tiles);
+    const distribution = distributeTiles(shuffledTiles);
+    const okeyTile = determineOkeyTile(tiles);
 
-    // Taşları dağıt
-    const distribution = distributeTiles([...tiles]);
-
-    // Okey taşını belirle
-    const okeyInfo = determineOkeyTile(distribution.centerTiles);
-
-    const initialGameState: GameState = {
+    setGameState({
       playerTiles: distribution.player1Tiles,
       otherPlayers: {
         player2: distribution.player2Tiles,
@@ -79,7 +82,7 @@ function App() {
       },
       centerTiles: distribution.centerTiles,
       drawPile: distribution.drawPile,
-      okeyInfo,
+      okeyInfo: { indicatorTile: okeyTile.indicatorTile, okeyTile: okeyTile.okeyTile },
       currentPlayer: 1,
       gamePhase: 'playing',
       selectedTile: null,
@@ -98,17 +101,7 @@ function App() {
         averageGameDuration: 0
       },
       gameStartTime: Date.now()
-    };
-
-    setGameState(initialGameState);
-
-    // Eğer başlangıçta AI oyuncusuysa otomatik hamle yap
-    if (initialGameState.currentPlayer !== 1) {
-      setTimeout(() => {
-        const newGameState = processAITurns(initialGameState);
-        setGameState(newGameState);
-      }, 1000);
-    }
+    });
   };
 
   const handleTileClick = (tile: Tile) => {
@@ -116,83 +109,30 @@ function App() {
   };
 
   const handleDrawTile = () => {
-    if (gameState.currentPlayer !== 1) return; // Sadece kendi sıramızda taş çekebiliriz
+    if (gameState.currentPlayer !== 1 || gameState.gamePhase !== 'playing') return;
 
-    let newGameState = drawTile(gameState);
+    const newGameState = drawTile(gameState);
     setGameState(newGameState);
-
-    // Ses efekti çal
-    if (window.gameSounds?.handleDrawSound) {
-      window.gameSounds.handleDrawSound();
-    }
-
-    // El kontrolü yap
-    if (checkForWinningHand(newGameState.playerTiles)) {
-      setGameState({ ...newGameState, gamePhase: 'finished' });
-      if (window.gameSounds?.handleWinSound) {
-        window.gameSounds.handleWinSound();
-      }
-      alert('🎉 TEBRİKLER! Eli bitirdiniz!');
-      return;
-    }
-
-    // AI oyuncularının hamle yapması için
-    setTimeout(() => {
-      newGameState = processAITurns(newGameState);
-      setGameState(newGameState);
-    }, 500); // Kısa bir gecikme için
   };
 
   const handleDiscardTile = () => {
-    if (gameState.currentPlayer !== 1 || !selectedTile) return; // Sadece kendi sıramızda ve seçili taş varsa
+    if (gameState.currentPlayer !== 1 || !selectedTile || gameState.gamePhase !== 'playing') return;
 
-    let newGameState = discardTile(gameState, selectedTile.id);
+    const newGameState = discardTile(gameState, selectedTile.id);
     setGameState(newGameState);
     setSelectedTile(null);
-
-    // Ses efekti çal
-    if (window.gameSounds?.handleDiscardSound) {
-      window.gameSounds.handleDiscardSound();
-    }
-
-    // El kontrolü yap
-    if (checkForWinningHand(newGameState.playerTiles)) {
-      setGameState({ ...newGameState, gamePhase: 'finished' });
-      if (window.gameSounds?.handleWinSound) {
-        window.gameSounds.handleWinSound();
-      }
-      alert('🎉 TEBRİKLER! Eli bitirdiniz!');
-      return;
-    }
-
-    // AI oyuncularının hamle yapması için
-    setTimeout(() => {
-      newGameState = processAITurns(newGameState);
-      setGameState(newGameState);
-    }, 500); // Kısa bir gecikme için
   };
 
   const handlePassTurn = () => {
-    if (gameState.currentPlayer !== 1) return; // Sadece kendi sıramızda pas geçebiliriz
+    if (gameState.currentPlayer !== 1 || gameState.gamePhase !== 'playing') return;
 
-    let newGameState = nextPlayerTurn(gameState);
+    const newGameState = nextPlayerTurn(gameState);
     setGameState(newGameState);
-
-    // Ses efekti çal
-    if (window.gameSounds?.handlePassSound) {
-      window.gameSounds.handlePassSound();
-    }
-
-    // AI oyuncularının hamle yapması için
-    setTimeout(() => {
-      newGameState = processAITurns(newGameState);
-      setGameState(newGameState);
-    }, 500); // Kısa bir gecikme için
   };
 
   const getPlayerName = (playerNumber: number) => {
     switch (playerNumber) {
-      case 1: return t('game.players');
+      case 1: return t('game.players', 'Sen');
       case 2: return t('game.player2', 'Oyuncu 2');
       case 3: return t('game.player3', 'Oyuncu 3');
       case 4: return t('game.player4', 'Oyuncu 4');
@@ -442,6 +382,7 @@ function App() {
                     {t('game.newGame', 'Yeni Oyun')}
                   </button>
                 </div>
+              </div>
             </div>
           </>
         )}
@@ -457,7 +398,6 @@ function App() {
       </div>
     </MultiplayerProvider>
   );
-}
 }
 
 export default App;

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import SubscriptionService from '../services/subscriptionService';
 import type { SubscriptionPlan, UserSubscription } from '../types/subscription';
 
 export const PremiumSettings: React.FC = () => {
-  const { t } = useTranslation();
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null);
   const [loading, setLoading] = useState(true);
@@ -174,3 +172,5 @@ export const PremiumSettings: React.FC = () => {
     </div>
   );
 };
+
+export default PremiumSettings;

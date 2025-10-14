@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import BetaTestService from '../services/betaTestService';
-import type { BetaFeedback } from '../services/betaTestService';
+import React, { useState } from 'react';
+import BetaTestService, { type BetaFeedback } from '../services/betaTestService';
 
 export const BetaFeedbackForm: React.FC = () => {
-  const { t } = useTranslation();
-  const [feedback, setFeedback] = useState<Partial<BetaFeedback>>({
+  const [feedback, setFeedback] = useState<Omit<BetaFeedback, 'id' | 'testerId' | 'status' | 'createdAt' | 'updatedAt'>>({
     type: 'general',
     severity: 'medium',
     platform: 'web',
     version: '1.0.0',
+    title: '',
+    description: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -31,6 +30,8 @@ export const BetaFeedbackForm: React.FC = () => {
         severity: 'medium',
         platform: 'web',
         version: '1.0.0',
+        title: '',
+        description: ''
       });
     } catch (error) {
       console.error('Feedback submission error:', error);
@@ -70,7 +71,7 @@ export const BetaFeedbackForm: React.FC = () => {
           </label>
           <select
             value={feedback.type}
-            onChange={(e) => setFeedback(prev => ({ ...prev, type: e.target.value as any }))}
+            onChange={(e) => setFeedback(prev => ({ ...prev, type: e.target.value as BetaFeedback['type'] }))}
             className="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
           >
             <option value="bug">Hata/Bug</option>
@@ -87,7 +88,7 @@ export const BetaFeedbackForm: React.FC = () => {
           </label>
           <select
             value={feedback.severity}
-            onChange={(e) => setFeedback(prev => ({ ...prev, severity: e.target.value as any }))}
+            onChange={(e) => setFeedback(prev => ({ ...prev, severity: e.target.value as BetaFeedback['severity'] }))}
             className="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
           >
             <option value="low">Düşük</option>
@@ -104,7 +105,7 @@ export const BetaFeedbackForm: React.FC = () => {
           </label>
           <select
             value={feedback.platform}
-            onChange={(e) => setFeedback(prev => ({ ...prev, platform: e.target.value as any }))}
+            onChange={(e) => setFeedback(prev => ({ ...prev, platform: e.target.value as BetaFeedback['platform'] }))}
             className="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
           >
             <option value="web">Web</option>

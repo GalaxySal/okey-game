@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
-import { Alert, Platform } from 'react-native';
-import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+// Payment service for subscription management
 
 export class PaymentService {
   private static readonly API_BASE = process.env.REACT_APP_API_URL || 'https://api.okey-game.com';
-  private static stripePublishableKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || 'pk_test_...';
 
   // Stripe ile ödeme başlatma
   static async createPaymentIntent(amount: number, currency: string = 'TRY'): Promise<string> {

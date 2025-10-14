@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+// Beta test service for managing beta testers and feedback
 
 interface BetaTester {
   id: string;
@@ -9,7 +9,7 @@ interface BetaTester {
   lastActivity: Date;
 }
 
-interface BetaFeedback {
+export interface BetaFeedback {
   id: string;
   testerId: string;
   type: 'bug' | 'feature' | 'improvement' | 'general';

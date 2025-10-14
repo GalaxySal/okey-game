@@ -1,9 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 
 // Lazy load edilen component'ler
-const ThreeDGameBoard = lazy(() => import('./components/ThreeDGameBoard'));
-const PremiumSettings = lazy(() => import('./components/PremiumSettings'));
-const TournamentLobby = lazy(() => import('./components/TournamentLobby'));
+export const LazyThreeDGameBoard = lazy(() => import('./ThreeDGameBoard'));
+export const LazyPremiumSettings = lazy(() => import('./PremiumSettings'));
 
 // Loading fallback component
 const LoadingSpinner: React.FC = () => (

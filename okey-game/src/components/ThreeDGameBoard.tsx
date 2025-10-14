@@ -148,3 +148,5 @@ export const ThreeDGameBoard: React.FC<ThreeDGameBoardProps> = ({
     </div>
   );
 };
+
+export default ThreeDGameBoard;

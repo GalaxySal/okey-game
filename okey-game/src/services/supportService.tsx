@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Alert } from 'react-native';
 
 export class SupportService {
   private static readonly API_BASE = process.env.REACT_APP_API_URL || 'https://api.okey-game.com';
@@ -107,7 +106,7 @@ export class SupportService {
   }
 
   // Platform tespiti
-  private static detectPlatform(): string {
+  static detectPlatform(): string {
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.includes('electron')) return 'Desktop';
     if (userAgent.includes('mobile') || userAgent.includes('android') || userAgent.includes('iphone')) return 'Mobile';
@@ -131,7 +130,7 @@ export const SupportForm: React.FC = () => {
     e.preventDefault();
 
     if (!formData.subject || !formData.message) {
-      Alert.alert('Hata', 'Lütfen tüm alanları doldurun');
+      alert('Lütfen tüm alanları doldurun');
       return;
     }
 
@@ -144,12 +143,9 @@ export const SupportForm: React.FC = () => {
       });
 
       setSubmitted(true);
-      Alert.alert(
-        'Başarılı',
-        `Destek biletiniz oluşturuldu. Bilet numarası: ${result.ticketId}\nTahmini yanıt süresi: ${result.estimatedResponseTime}`
-      );
+      alert(`Destek biletiniz oluşturuldu. Bilet numarası: ${result.ticketId}\nTahmini yanıt süresi: ${result.estimatedResponseTime}`);
     } catch (error) {
-      Alert.alert('Hata', 'Destek bileti oluşturulurken bir hata oluştu');
+      alert('Destek bileti oluşturulurken bir hata oluştu');
     } finally {
       setIsSubmitting(false);
     }
