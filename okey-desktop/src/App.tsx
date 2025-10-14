@@ -26,7 +26,7 @@ function App() {
 
 const GameContent: React.FC = () => {
   const { t } = useTranslation();
-  const { updateInfo, updateStatus, performUpdate, dismissUpdate, showUpdateDialog, setShowUpdateDialog } = useAppUpdater();
+  const { updateInfo, updateStatus, performUpdate, dismissUpdate, showUpdateDialog, setShowUpdateDialog, checkUpdates } = useAppUpdater();
   const { isDark } = useTheme();
 
   const [showMenu, setShowMenu] = useState(true);
@@ -153,7 +153,7 @@ const GameContent: React.FC = () => {
       isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-green-900 via-green-800 to-green-900'
     }`}>
       {/* FPS Göstergesi - Production ortamında görünür */}
-      {import.meta.env.PROD && <FPSCounter position="top-left" />}
+      {import.meta.env.PROD && <FPSCounter position="bottom-right" />}
 
           {/* Güncelleme Bildirimi */}
         {updateInfo.available && !showUpdateDialog && (
@@ -171,6 +171,18 @@ const GameContent: React.FC = () => {
                 Güncelle
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Manuel Güncelleme Kontrolü Butonu - Debug için */}
+        {import.meta.env.DEV && (
+          <div className="fixed top-4 left-4 z-50 bg-blue-600 text-white p-2 rounded-lg shadow-lg">
+            <button
+              onClick={checkUpdates}
+              className="text-xs font-bold hover:bg-blue-700 px-2 py-1 rounded transition-colors"
+            >
+              🔍 Güncelleme Kontrolü
+            </button>
           </div>
         )}
         {showMenu && (
