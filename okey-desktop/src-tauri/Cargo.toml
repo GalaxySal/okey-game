@@ -1,6 +1,6 @@
 [package]
 name = "okey-desktop"
-version = "1.0.3"
+version = "1.0.4"
 description = "Türkçe Okey Oyunu - Desktop Uygulaması"
 authors = ["Nazım Pala"]
 edition = "2021"

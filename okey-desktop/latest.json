@@ -1,11 +1,11 @@
 {
-  "version": "1.0.3",
-  "notes": "Yeni sürüm mevcut! Gelişmiş özellikler ve hata düzeltmeleri içeriyor.",
-  "pub_date": "2025-10-15T00:00:00Z",
+  "version": "1.0.4",
+  "notes": "🎮 Yeni özellik: FPS (Frames Per Second) göstergesi eklendi! Oyun performansınızı anlık olarak takip edebilirsiniz.",
+  "pub_date": "2025-10-15T01:45:00Z",
   "platforms": {
     "windows-x86_64": {
       "signature": "",
-      "url": "https://github.com/GalaxySal/okey-game/releases/download/v1.0.3/Okey_Desktop_1.0.3_x64-setup.exe"
+      "url": "https://github.com/GalaxySal/okey-game/releases/download/v1.0.4/Okey_Desktop_1.0.4_x64-setup.exe"
     }
   }
 }

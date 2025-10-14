@@ -11,6 +11,7 @@ import { BeginMenu } from './components/BeginMenu';
 import { MultiplayerProvider } from './contexts/MultiplayerContext';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { RoomSelection } from './components/RoomSelection';
+import { FPSCounter } from './components/FPSCounter';
 
 // İçerik komponenti - ThemeProvider içinde useTheme kullanacak
 function App() {
@@ -151,6 +152,9 @@ const GameContent: React.FC = () => {
     <div className={`min-h-screen p-4 transition-colors duration-300 ${
       isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-green-900 via-green-800 to-green-900'
     }`}>
+      {/* FPS Göstergesi - Production ortamında görünür */}
+      {import.meta.env.PROD && <FPSCounter position="top-left" />}
+
           {/* Güncelleme Bildirimi */}
         {updateInfo.available && !showUpdateDialog && (
           <div className="fixed top-4 right-4 z-50 bg-green-600 text-white p-4 rounded-lg shadow-lg animate-bounce max-w-sm">
