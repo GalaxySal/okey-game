@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useAppUpdater } from './hooks/useAppUpdater';
+import { GameSounds } from './components/GameSounds';
 import { PerformanceMonitor } from './hooks/usePerformanceMonitor';
 import { TileComponent } from './components/Tile';
 import { UpdateDialog } from './components/UpdateDialog';
@@ -7,17 +9,18 @@ import GameOverDialog from './components/GameOverDialog';
 import { nextPlayerTurn, drawTile, discardTile, checkForWinningHand, type GameState, processAITurns, checkForWinner, initializeScoreSystem } from './utils/gameLogic';
 import { useTranslation } from 'react-i18next';
 import { BeginMenu } from './components/BeginMenu';
+import { MultiplayerProvider } from './contexts/MultiplayerContext';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
-import { useAppUpdater } from './hooks/useAppUpdater';
-import { GameSounds } from './components/GameSounds';
-import './i18n';
+import { RoomSelection } from './components/RoomSelection';
 
 // İçerik komponenti - ThemeProvider içinde useTheme kullanacak
 function App() {
   return (
-    <ThemeProvider>
-      <GameContent />
-    </ThemeProvider>
+    <MultiplayerProvider>
+      <ThemeProvider>
+        <GameContent />
+      </ThemeProvider>
+    </MultiplayerProvider>
   );
 }
 
@@ -27,6 +30,7 @@ const GameContent: React.FC = () => {
   const { isDark } = useTheme();
 
   const [showMenu, setShowMenu] = useState(true);
+  const [showRoomSelection, setShowRoomSelection] = useState(false);
 
   // Single player için
   const [gameState, setGameState] = useState<GameState>({
@@ -148,19 +152,31 @@ const GameContent: React.FC = () => {
     <div className={`min-h-screen p-4 transition-colors duration-300 ${
       isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-green-900 via-green-800 to-green-900'
     }`}>
-      {/* Başlangıç Menüsü */}
-      {showMenu && (
-        <BeginMenu
-          setShowMenu={setShowMenu}
-          setGameState={setGameState}
-          onExit={() => window.close()}
-          onMultiplayer={() => {
-            // Çoklu oyun için gerekli işlemler burada yapılacak
-            setShowMenu(false);
-            // TODO: Çoklu oyun lobisini göster
-          }}
-        />
-      )}
+        {/* Başlangıç Menüsü */}
+        {showMenu && (
+          <BeginMenu
+            setShowMenu={setShowMenu}
+            setGameState={setGameState}
+            onExit={() => window.close()}
+            onMultiplayer={() => setShowRoomSelection(true)}
+            onShowSettings={() => {
+              // TODO: Settings component eklenecek
+              console.log('Settings açılacak');
+            }}
+          />
+        )}
+
+        {/* Oda Seçimi */}
+        {showRoomSelection && (
+          <RoomSelection
+            onBackToMenu={() => setShowRoomSelection(false)}
+            onJoinRoom={(roomId) => {
+              setShowRoomSelection(false);
+              // TODO: Multiplayer oyun başlatma
+              console.log('Odaya katılınıyor:', roomId);
+            }}
+          />
+        )}
 
       {/* Ana Oyun */}
       {!showMenu && (

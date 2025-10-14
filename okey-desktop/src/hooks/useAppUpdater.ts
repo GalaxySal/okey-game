@@ -17,8 +17,8 @@ interface UpdateInfo {
 export const useAppUpdater = () => {
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo>({
     available: false,
-    currentVersion: '1.0.1',
-    latestVersion: '1.0.1'
+    currentVersion: '1.0.2',
+    latestVersion: '1.0.2'
   });
 
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>({
@@ -125,8 +125,8 @@ export const useAppUpdater = () => {
       // Hata durumunda varsayılan değerleri kullan
       setUpdateInfo({
         available: false,
-        currentVersion: '1.0.1',
-        latestVersion: '1.0.1'
+        currentVersion: '1.0.2',
+        latestVersion: '1.0.2'
       });
     }
   };
