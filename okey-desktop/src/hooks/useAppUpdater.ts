@@ -92,7 +92,42 @@ export const useAppUpdater = () => {
       }
 
       const release = await response.json();
-      const latestVersion = release.tag_name.replace('v', '');
+      let latestVersion = release.tag_name.replace('v', '');
+
+      // Eğer tag "main-desktop" gibi bir branch adıysa, asset dosya adlarından sürüm numarasını al
+      if (latestVersion === 'main-desktop' || latestVersion.includes('main') || !latestVersion.match(/^\d+\.\d+\.\d+$/)) {
+        console.log('GitHub Release tag sürüm numarası içermiyor, asset dosya adlarından tespit ediliyor...');
+        
+        // Asset dosya adlarından sürüm numaralarını çıkar
+        const versionRegex = /(\d+\.\d+\.\d+)/;
+        const versions: string[] = [];
+        
+        release.assets.forEach((asset: any) => {
+          const match = asset.name.match(versionRegex);
+          if (match) {
+            versions.push(match[1]);
+          }
+        });
+
+        if (versions.length > 0) {
+          // En yüksek sürüm numarasını bul
+          latestVersion = versions.sort((a, b) => {
+            const aParts = a.split('.').map(Number);
+            const bParts = b.split('.').map(Number);
+            
+            for (let i = 0; i < 3; i++) {
+              if (aParts[i] > bParts[i]) return -1;
+              if (aParts[i] < bParts[i]) return 1;
+            }
+            return 0;
+          })[0];
+          
+          console.log(`Asset dosya adlarından tespit edilen sürüm: ${latestVersion}`);
+        } else {
+          console.warn('Asset dosya adlarından sürüm numarası bulunamadı, varsayılan 1.0.2 kullanılıyor');
+          latestVersion = '1.0.2';
+        }
+      }
 
       console.log(`Current: ${currentVersion}, Latest: ${latestVersion}`);
 
@@ -201,6 +236,14 @@ export const useAppUpdater = () => {
   };
 
   useEffect(() => {
+    // Development ortamında auto-update'i devre dışı bırak (GitHub API rate limit)
+    const ENABLE_AUTO_UPDATE = import.meta.env.VITE_ENABLE_AUTO_UPDATE !== 'false';
+    
+    if (!ENABLE_AUTO_UPDATE) {
+      console.log('🔍 Auto-Update devre dışı (Development ortamı)');
+      return;
+    }
+
     // Uygulama başladığında güncelleme kontrolü yap
     console.log('🔍 Uygulama başlatıldı, güncelleme kontrolü başlıyor...');
     checkUpdates();
