@@ -17,13 +17,15 @@ interface UpdateInfo {
 export const useAppUpdater = () => {
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo>({
     available: false,
-    currentVersion: '1.0.2',
-    latestVersion: '1.0.2'
+    currentVersion: '1.0.3',
+    latestVersion: '1.0.3'
   });
 
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>({
     status: 'idle'
   });
+
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
 
   const checkUpdates = async () => {
     try {
@@ -39,23 +41,46 @@ export const useAppUpdater = () => {
 
       try {
         const update = await check();
+        console.log('Tauri updater kontrolü başarılı:', update);
+        console.log('Update objesi detayları:', {
+          available: update?.available,
+          // latestVersion mevcut değil - Tauri Update tipinde yok
+          // downloadUrl mevcut değil - Tauri Update tipinde yok
+          // signature mevcut değil - Tauri Update tipinde yok
+          date: update?.date || 'Bilinmiyor',
+          body: update?.body || 'Açıklama mevcut değil'
+        });
 
         if (update?.available) {
           console.log(`Güncelleme mevcut`);
+          console.log('Güncelleme detayları:', {
+            version: '1.0.2', // Tauri updater doesn't provide version info directly
+            date: update.date || 'Bilinmiyor',
+            body: update.body || 'Açıklama mevcut değil'
+          });
 
           setUpdateInfo({
             available: true,
             currentVersion,
-            latestVersion: '1.0.1', // Tauri updater doesn't provide version info directly
+            latestVersion: '1.0.2', // Tauri updater doesn't provide version info directly
             releaseNotes: 'Yeni sürüm mevcut! Gelişmiş özellikler ve hata düzeltmeleri içeriyor.',
             downloadSize: 'Bilinmiyor'
           });
 
           setUpdateStatus({ status: 'idle' });
+          setShowUpdateDialog(true);
           return;
+        } else {
+          console.log('Tauri updater: Güncelleme bulunamadı');
         }
-      } catch (tauriError) {
-        console.warn('Tauri updater kontrolü başarısız, GitHub API fallback kullanılıyor:', tauriError);
+      } catch (tauriError: any) {
+        console.error('Tauri updater detaylı hata:', {
+          message: tauriError.message,
+          stack: tauriError.stack,
+          name: tauriError.name,
+          cause: tauriError.cause
+        });
+        console.warn('Tauri updater kontrolü başarısız, GitHub API fallback kullanılıyor:', tauriError.message);
       }
 
       // Fallback: GitHub Releases API kontrolü
@@ -105,6 +130,7 @@ export const useAppUpdater = () => {
         });
 
         setUpdateStatus({ status: 'idle' });
+        setShowUpdateDialog(true); // Güncelleme bulunduğunda otomatik göster
       } else {
         setUpdateInfo({
           available: false,
@@ -125,8 +151,8 @@ export const useAppUpdater = () => {
       // Hata durumunda varsayılan değerleri kullan
       setUpdateInfo({
         available: false,
-        currentVersion: '1.0.2',
-        latestVersion: '1.0.2'
+        currentVersion: '1.0.3',
+        latestVersion: '1.0.3'
       });
     }
   };
@@ -171,18 +197,20 @@ export const useAppUpdater = () => {
   };
 
   const dismissUpdate = () => {
-    // Güncelleme dialog'u artık otomatik gösterilmiyor, sadece bilgi amaçlı
-    console.log('Güncelleme bilgisi kapatıldı');
+    setShowUpdateDialog(false);
   };
 
   useEffect(() => {
     // Uygulama başladığında güncelleme kontrolü yap
+    console.log('🔍 Uygulama başlatıldı, güncelleme kontrolü başlıyor...');
     checkUpdates();
   }, []);
 
   return {
     updateInfo,
     updateStatus,
+    showUpdateDialog,
+    setShowUpdateDialog,
     checkUpdates,
     performUpdate,
     dismissUpdate

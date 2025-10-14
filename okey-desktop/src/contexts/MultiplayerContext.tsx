@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { io, type Socket } from 'socket.io-client';
-import { useTranslation } from 'react-i18next';
 
 interface Room {
   id: string;
@@ -41,7 +40,6 @@ interface MultiplayerProviderProps {
 }
 
 export const MultiplayerProvider: React.FC<MultiplayerProviderProps> = ({ children }) => {
-  const { t } = useTranslation();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [players, setPlayers] = useState<string[]>([]);
@@ -55,41 +53,41 @@ export const MultiplayerProvider: React.FC<MultiplayerProviderProps> = ({ childr
 
     newSocket.on('connect', () => {
       setIsConnected(true);
-      console.log(t('multiplayer.connected', 'Multiplayer bağlantısı kuruldu'));
+      console.log('Multiplayer bağlantısı kuruldu');
     });
 
     newSocket.on('disconnect', () => {
       setIsConnected(false);
-      console.log(t('multiplayer.disconnected', 'Multiplayer bağlantısı kesildi'));
+      console.log('Multiplayer bağlantısı kesildi');
     });
 
     newSocket.on('room_created', (room: Room) => {
       setRooms((prev: Room[]) => [...prev, room]);
-      console.log(t('multiplayer.roomCreated', 'Oda oluşturuldu:'), room.name);
+      console.log('Oda oluşturuldu:', room.name);
     });
 
     newSocket.on('room_deleted', (roomId: string) => {
       setRooms((prev: Room[]) => prev.filter((room: Room) => room.id !== roomId));
-      console.log(t('multiplayer.roomDeleted', 'Oda silindi:'), roomId);
+      console.log('Oda silindi:', roomId);
     });
 
     newSocket.on('rooms_list', (roomsList: Room[]) => {
       setRooms(roomsList);
-      console.log(t('multiplayer.roomsUpdated', 'Oda listesi güncellendi'));
+      console.log('Oda listesi güncellendi');
     });
 
     newSocket.on('player_joined', (playerName: string) => {
       setPlayers((prev: string[]) => [...prev, playerName]);
-      console.log(t('multiplayer.playerJoined', 'Oyuncu katıldı:'), playerName);
+      console.log('Oyuncu katıldı:', playerName);
     });
 
     newSocket.on('player_left', (playerName: string) => {
       setPlayers((prev: string[]) => prev.filter((p: string) => p !== playerName));
-      console.log(t('multiplayer.playerLeft', 'Oyuncu ayrıldı:'), playerName);
+      console.log('Oyuncu ayrıldı:', playerName);
     });
 
     newSocket.on('game_state_update', (gameState: Record<string, unknown>) => {
-      console.log(t('multiplayer.gameStateUpdate', 'Oyun durumu güncellendi:'), gameState);
+      console.log('Oyun durumu güncellendi:', gameState);
     });
 
     setSocket(newSocket);

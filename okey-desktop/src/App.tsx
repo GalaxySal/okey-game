@@ -1,7 +1,6 @@
+import './i18n';
 import { useState, useEffect } from 'react';
 import { useAppUpdater } from './hooks/useAppUpdater';
-import { GameSounds } from './components/GameSounds';
-import { PerformanceMonitor } from './hooks/usePerformanceMonitor';
 import { TileComponent } from './components/Tile';
 import { UpdateDialog } from './components/UpdateDialog';
 import type { Tile } from './components/Tile';
@@ -26,7 +25,7 @@ function App() {
 
 const GameContent: React.FC = () => {
   const { t } = useTranslation();
-  const { updateInfo, updateStatus, performUpdate, dismissUpdate } = useAppUpdater();
+  const { updateInfo, updateStatus, performUpdate, dismissUpdate, showUpdateDialog, setShowUpdateDialog } = useAppUpdater();
   const { isDark } = useTheme();
 
   const [showMenu, setShowMenu] = useState(true);
@@ -152,7 +151,24 @@ const GameContent: React.FC = () => {
     <div className={`min-h-screen p-4 transition-colors duration-300 ${
       isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-green-900 via-green-800 to-green-900'
     }`}>
-        {/* Başlangıç Menüsü */}
+          {/* Güncelleme Bildirimi */}
+        {updateInfo.available && !showUpdateDialog && (
+          <div className="fixed top-4 right-4 z-50 bg-green-600 text-white p-4 rounded-lg shadow-lg animate-bounce max-w-sm">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">🚀</span>
+              <div className="flex-1">
+                <div className="font-bold text-sm">Yeni Güncelleme!</div>
+                <div className="text-xs opacity-90">v{updateInfo.latestVersion} mevcut</div>
+              </div>
+              <button
+                onClick={() => setShowUpdateDialog(true)}
+                className="bg-white text-green-600 px-3 py-1 rounded text-xs font-bold hover:bg-gray-100 transition-colors"
+              >
+                Güncelle
+              </button>
+            </div>
+          </div>
+        )}
         {showMenu && (
           <BeginMenu
             setShowMenu={setShowMenu}
@@ -256,11 +272,6 @@ const GameContent: React.FC = () => {
                 </div>
               )}
             </div>
-
-            {/* Ses Efektleri */}
-            <GameSounds
-              selectedTile={selectedTile}
-            />
 
             {/* Ana Oyun Alanı ve Skor Paneli */}
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
@@ -494,18 +505,17 @@ const GameContent: React.FC = () => {
       )}
 
       {/* Güncelleme Dialog'u */}
-      <UpdateDialog
-        updateInfo={updateInfo}
-        updateStatus={updateStatus}
-        onUpdate={performUpdate}
-        onDismiss={dismissUpdate}
-      />
+      {showUpdateDialog && (
+        <UpdateDialog
+          updateInfo={updateInfo}
+          updateStatus={updateStatus}
+          onUpdate={performUpdate}
+          onDismiss={dismissUpdate}
+        />
+      )}
       {gameState.gamePhase === 'finished' && (
         <GameOverDialog onRestart={() => setShowMenu(true)} />
       )}
-
-      {/* Performans Monitoring - Development Only */}
-      <PerformanceMonitor />
     </div>
   );
 }
