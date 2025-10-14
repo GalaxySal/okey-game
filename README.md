@@ -179,7 +179,21 @@ Katkılarınızı bekliyoruz! Lütfen şu adımları takip edin:
 
 ## 📈 Sürüm Geçmişi
 
-### v0.3.0 (En Güncel) - 2025-10-11
+### v1.0.0 (En Güncel) - 2025-10-14
+
+#### Tüm Platformlar
+
+- ✅ **Native Mobil Uygulama** - React Native ile iOS/Android tam destek
+- ✅ **Gelişmiş Grafik Sistemi** - 3D taşlar ve animasyonlar
+- ✅ **Sosyal Özellikler** - Profil sistemi ve arkadaş listesi
+- ✅ **Turnuva Modu** - Çoklu oyun turnuvaları sistemi
+- ✅ **Cross-Platform Sync** - Tüm cihazlar arası veri senkronizasyonu
+- ✅ **Çoklu Dil Sistemi** - Türkçe ve İngilizce tam çeviri
+- ✅ **PWA Özellikleri** - Offline oynanabilirlik ve mobil deneyim
+- ✅ **Multiplayer Sistemi** - Socket.io ile gerçek zamanlı çoklu oyuncu
+- ✅ **Gelişmiş AI Algoritmaları** - Stratejik karar verme sistemi
+
+### v0.3.0 - 2025-10-11
 
 #### Tüm Platformlar
 
@@ -210,14 +224,14 @@ Katkılarınızı bekliyoruz! Lütfen şu adımları takip edin:
 - ✅ Responsive tasarım
 - ✅ TypeScript desteği
 
-### Gelecek Sürümler
+### Gelecek Sürüm Planları
 
-#### v1.0.0 (Planlanan)
+#### v1.1.0 (Planlanan)
 
-- 🔴 **Mobil Uygulama** - Flutter/React Native desteği
-- 🔴 **Gelişmiş Grafikler** - 3D taşlar ve animasyonlar
-- 🔴 **Sosyal Özellikler** - Profil sistemi ve arkadaş listesi
-- 🔴 **Turnuva Modu** - Çoklu oyun turnuvaları
+- 🔴 **Gelişmiş Multiplayer** - Özel odalar ve sesli sohbet
+- 🔴 **VR Desteği** - Sanal gerçeklik okey deneyimi
+- 🔴 **Blockchain Entegrasyonu** - NFT koleksiyonları
+- 🔴 **AI Koçu** - Kişiselleştirilmiş oyun önerileri
 
 ---
 

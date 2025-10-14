@@ -1,0 +1,47 @@
+{
+  "game": {
+    "title": "OKEY GAME",
+    "subtitle": "Turkish Classic Okey",
+    "players": "You",
+    "player2": "Player 2",
+    "player3": "Player 3",
+    "player4": "Player 4",
+    "drawTile": "Draw",
+    "discard": "Discard",
+    "pass": "Pass",
+    "newGame": "New Game",
+    "centerTiles": "CENTER TILES",
+    "indicator": "Indicator",
+    "okeyTile": "Okey",
+    "status": "Status",
+    "playing": "Playing",
+    "waiting": "Waiting",
+    "nextPlayer": "Next Player",
+    "drawPile": "Draw Pile",
+    "tiles": "tiles",
+    "handTiles": "Hand Tiles",
+    "handCheck": "Hand Check",
+    "joker": "JOKER",
+    "okey": "OKEY",
+    "unknown": "Unknown"
+  },
+  "colors": {
+    "red": "Red",
+    "black": "Black",
+    "yellow": "Yellow",
+    "blue": "Blue"
+  },
+  "navigation": {
+    "home": "Home",
+    "game": "Game",
+    "settings": "Settings",
+    "profile": "Profile"
+  },
+  "settings": {
+    "title": "Settings",
+    "soundEffects": "Sound Effects",
+    "volume": "Volume",
+    "language": "Language",
+    "theme": "Theme"
+  }
+}

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { BeginMenu } from './components/BeginMenu';
+import { PerformanceMonitor } from './hooks/usePerformanceMonitor';
 import { TileComponent } from './components/Tile';
 import { UpdateDialog } from './components/UpdateDialog';
 import type { Tile } from './components/Tile';
 import GameOverDialog from './components/GameOverDialog';
 import { nextPlayerTurn, drawTile, discardTile, checkForWinningHand, type GameState, processAITurns, checkForWinner, initializeScoreSystem } from './utils/gameLogic';
+import { useTranslation } from 'react-i18next';
+import { BeginMenu } from './components/BeginMenu';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { useAppUpdater } from './hooks/useAppUpdater';
 import { GameSounds } from './components/GameSounds';
 import './i18n';
@@ -13,6 +15,7 @@ import './i18n';
 function App() {
   const { t } = useTranslation();
   const { updateInfo, updateStatus, performUpdate, dismissUpdate } = useAppUpdater();
+  const { isDark } = useTheme();
 
   const [showMenu, setShowMenu] = useState(true);
 
@@ -133,7 +136,7 @@ function App() {
   };
 
   return (
-    <>
+    <ThemeProvider>
       {/* Başlangıç Menüsü */}
       {showMenu && (
         <BeginMenu
@@ -150,12 +153,14 @@ function App() {
 
       {/* Ana Oyun */}
       {!showMenu && (
-        <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-900 p-4">
+        <div className={`min-h-screen p-4 transition-colors duration-300 ${
+          isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-green-900 via-green-800 to-green-900'
+        }`}>
           <div className="max-w-7xl mx-auto">
             {/* Başlık */}
             <div className="text-center mb-6">
-              <h1 className="text-4xl font-bold text-white mb-2">OKEY OYUNU</h1>
-              <p className="text-green-200">Türkçe Klasik Okey Oyunu</p>
+              <h1 className={`text-4xl font-bold mb-2 ${isDark ? 'text-white' : 'text-white'}`}>OKEY OYUNU</h1>
+              <p className={`text-lg ${isDark ? 'text-gray-200' : 'text-green-200'}`}>Türkçe Klasik Okey Oyunu</p>
 
               {/* Güncelleme Bilgileri - DAHA BELİRGİN */}
               {updateInfo.available && updateStatus.status === 'idle' && (
@@ -242,7 +247,9 @@ function App() {
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
               {/* Skor Tablosu */}
               <div className="xl:col-span-1">
-                <div className="bg-gray-800 rounded-lg p-4 border-2 border-yellow-500 shadow-lg">
+                <div className={`rounded-lg p-4 border-2 shadow-lg ${
+                  isDark ? 'bg-gray-800 border-yellow-500' : 'bg-gray-800 border-yellow-500'
+                }`}>
                   <h3 className="text-white text-lg font-bold mb-4 text-center">🏆 SKOR TABLOSU</h3>
 
                   {/* Geçerli Skorlar */}
@@ -477,7 +484,10 @@ function App() {
       {gameState.gamePhase === 'finished' && (
         <GameOverDialog onRestart={() => setShowMenu(true)} />
       )}
-    </>
+
+      {/* Performans Monitoring - Development Only */}
+      <PerformanceMonitor />
+    </ThemeProvider>
   );
 }
 

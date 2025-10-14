@@ -1,0 +1,47 @@
+{
+  "game": {
+    "title": "OKEY OYUNU",
+    "subtitle": "Türkçe Klasik Okey",
+    "players": "Sen",
+    "player2": "Oyuncu 2",
+    "player3": "Oyuncu 3",
+    "player4": "Oyuncu 4",
+    "drawTile": "Çek",
+    "discard": "At",
+    "pass": "Pas",
+    "newGame": "Yeni Oyun",
+    "centerTiles": "YER TAŞLARI",
+    "indicator": "Gösterici",
+    "okeyTile": "Okey",
+    "status": "Durum",
+    "playing": "Oynanıyor",
+    "waiting": "Bekleniyor",
+    "nextPlayer": "Sıradaki",
+    "drawPile": "Çekme Havuzu",
+    "tiles": "taş",
+    "handTiles": "Elindeki Taş",
+    "handCheck": "El Kontrolü",
+    "joker": "JOKER",
+    "okey": "OKEY",
+    "unknown": "Bilinmiyor"
+  },
+  "colors": {
+    "red": "Kırmızı",
+    "black": "Siyah",
+    "yellow": "Sarı",
+    "blue": "Mavi"
+  },
+  "navigation": {
+    "home": "Ana Sayfa",
+    "game": "Oyun",
+    "settings": "Ayarlar",
+    "profile": "Profil"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "soundEffects": "Ses Efektleri",
+    "volume": "Ses Seviyesi",
+    "language": "Dil",
+    "theme": "Tema"
+  }
+}
