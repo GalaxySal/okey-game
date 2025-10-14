@@ -6,7 +6,7 @@ interface GameSoundsProps {
 }
 
 export const GameSounds: React.FC<GameSoundsProps> = ({
-  selectedTile,
+  selectedTile: _selectedTile,
 }) => {
   // TODO: Ses efektleri eklenecek
   // Web Audio API şu anda çalışmıyor
