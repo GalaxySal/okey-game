@@ -217,19 +217,11 @@ const GameContent: React.FC = () => {
               )}
 
               {/* Güncelleme İndiriliyor */}
-              {updateStatus.status === 'downloading' && updateStatus.progress !== undefined && (
+              {updateStatus.status === 'downloading' && (
                 <div className="mt-4 p-4 bg-blue-800 rounded-lg text-white">
-                  <div className="mb-2">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Güncelleme indiriliyor...</span>
-                      <span>{updateStatus.progress}%</span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div
-                        className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${updateStatus.progress}%` }}
-                      ></div>
-                    </div>
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <span>Güncelleme indiriliyor...</span>
                   </div>
                 </div>
               )}

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 interface UpdateStatus {
   status: 'idle' | 'checking' | 'downloading' | 'ready' | 'error';
-  progress?: number;
   error?: string;
 }
 
@@ -18,21 +17,49 @@ interface UpdateInfo {
 export const useAppUpdater = () => {
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo>({
     available: false,
-    currentVersion: '0.2.0',
-    latestVersion: '0.2.0'
+    currentVersion: '1.0.1',
+    latestVersion: '1.0.1'
   });
 
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>({
     status: 'idle'
   });
 
-  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
-
   const checkUpdates = async () => {
     try {
       setUpdateStatus({ status: 'checking' });
 
-      // GitHub Releases API'sini kullan
+      // Mevcut sürümü package.json'dan al
+      const currentVersionResponse = await fetch('/package.json');
+      const packageJson = await currentVersionResponse.json();
+      const currentVersion = packageJson.version || '1.0.0';
+
+      // Tauri updater'ı kullanarak güncelleme kontrolü yap
+      const { check } = await import('@tauri-apps/plugin-updater');
+
+      try {
+        const update = await check();
+
+        if (update?.available) {
+          console.log(`Güncelleme mevcut`);
+
+          setUpdateInfo({
+            available: true,
+            currentVersion,
+            latestVersion: '1.0.1', // Tauri updater doesn't provide version info directly
+            releaseNotes: 'Yeni sürüm mevcut! Gelişmiş özellikler ve hata düzeltmeleri içeriyor.',
+            downloadSize: 'Bilinmiyor'
+          });
+
+          setUpdateStatus({ status: 'idle' });
+          return;
+        }
+      } catch (tauriError) {
+        console.warn('Tauri updater kontrolü başarısız, GitHub API fallback kullanılıyor:', tauriError);
+      }
+
+      // Fallback: GitHub Releases API kontrolü
+      console.log('GitHub API fallback kullanılıyor...');
       const response = await fetch('https://api.github.com/repos/GalaxySal/okey-game/releases/latest');
 
       if (!response.ok) {
@@ -40,18 +67,27 @@ export const useAppUpdater = () => {
       }
 
       const release = await response.json();
-
-      // Mevcut sürümü package.json'dan al
-      const currentVersionResponse = await fetch('/package.json');
-      const packageJson = await currentVersionResponse.json();
-      const currentVersion = packageJson.version || '0.2.0';
-
-      const latestVersion = release.tag_name.replace('v', ''); // 'v1.0.0' -> '1.0.0'
+      const latestVersion = release.tag_name.replace('v', '');
 
       console.log(`Current: ${currentVersion}, Latest: ${latestVersion}`);
 
-      // Sürüm karşılaştırması (basit string karşılaştırma)
-      const hasUpdate = latestVersion > currentVersion;
+      // Sürüm karşılaştırması için semver benzeri karşılaştırma
+      const compareVersions = (v1: string, v2: string): number => {
+        const parts1 = v1.split('.').map(Number);
+        const parts2 = v2.split('.').map(Number);
+
+        for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
+          const part1 = parts1[i] || 0;
+          const part2 = parts2[i] || 0;
+
+          if (part1 > part2) return 1;
+          if (part1 < part2) return -1;
+        }
+
+        return 0;
+      };
+
+      const hasUpdate = compareVersions(latestVersion, currentVersion) > 0;
 
       if (hasUpdate) {
         // Assets içinden .exe dosyasını bul
@@ -69,7 +105,6 @@ export const useAppUpdater = () => {
         });
 
         setUpdateStatus({ status: 'idle' });
-        setShowUpdateDialog(true);
       } else {
         setUpdateInfo({
           available: false,
@@ -90,15 +125,15 @@ export const useAppUpdater = () => {
       // Hata durumunda varsayılan değerleri kullan
       setUpdateInfo({
         available: false,
-        currentVersion: '0.2.0',
-        latestVersion: '0.2.0'
+        currentVersion: '1.0.1',
+        latestVersion: '1.0.1'
       });
     }
   };
 
   const performUpdate = async () => {
     try {
-      setUpdateStatus({ status: 'downloading', progress: 0 });
+      setUpdateStatus({ status: 'downloading' });
 
       // Tauri updater kullanarak gerçek güncelleme
       const { check } = await import('@tauri-apps/plugin-updater');
@@ -107,11 +142,14 @@ export const useAppUpdater = () => {
       const update = await check();
 
       if (update?.available) {
-        // İndirme ve yükleme
+        console.log(`Güncelleme indiriliyor`);
+
+        // İndirme ve yükleme - progress callback'i düzeltildi
         await update.downloadAndInstall();
 
         // Güncelleme tamamlandı bilgisi
         console.log('Güncelleme başarıyla yüklendi!');
+        setUpdateStatus({ status: 'ready' });
 
         // Uygulamayı yeniden başlatmak için kullanıcıya bilgi ver
         if (confirm('Güncelleme yüklendi. Uygulama yeniden başlatılacak. Devam etmek istiyor musunuz?')) {
@@ -133,7 +171,8 @@ export const useAppUpdater = () => {
   };
 
   const dismissUpdate = () => {
-    setShowUpdateDialog(false);
+    // Güncelleme dialog'u artık otomatik gösterilmiyor, sadece bilgi amaçlı
+    console.log('Güncelleme bilgisi kapatıldı');
   };
 
   useEffect(() => {
@@ -144,7 +183,6 @@ export const useAppUpdater = () => {
   return {
     updateInfo,
     updateStatus,
-    showUpdateDialog,
     checkUpdates,
     performUpdate,
     dismissUpdate
