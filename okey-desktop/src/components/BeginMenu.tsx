@@ -51,6 +51,19 @@ export const BeginMenu: React.FC<BeginMenuProps> = ({
     <div className={`fixed inset-0 bg-gradient-to-br from-green-900 via-green-800 to-green-900 flex items-center justify-center z-50 transition-all duration-300 ${
       isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
     }`}>
+      {/* Manuel Güncelleme Kontrolü Butonu - BeginMenu'da da görünür */}
+      <div className="fixed top-4 left-4 z-[9999] bg-blue-600 text-white p-2 rounded-lg shadow-lg">
+        <button
+          onClick={() => {
+            // Manuel güncelleme kontrolü için useAppUpdater'dan checkUpdates çağır
+            window.dispatchEvent(new CustomEvent('manualUpdateCheck'));
+          }}
+          className="text-xs font-bold hover:bg-blue-700 px-2 py-1 rounded transition-colors"
+        >
+          🔍 Güncelleme Kontrolü
+        </button>
+      </div>
+
       <div className={`bg-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 border-2 border-yellow-500 shadow-2xl transform transition-all duration-500 ${
         isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
       }`}>

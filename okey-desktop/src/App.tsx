@@ -51,9 +51,17 @@ const GameContent: React.FC = () => {
 
   const [selectedTile, setSelectedTile] = useState<Tile | null>(null);
 
-  // Oyunu başlat
+  // Manuel güncelleme kontrolü için event listener
   useEffect(() => {
-    // Artık başlangıç menüsü var, otomatik başlatma yok
+    const handleManualUpdateCheck = () => {
+      checkUpdates();
+    };
+
+    window.addEventListener('manualUpdateCheck', handleManualUpdateCheck);
+
+    return () => {
+      window.removeEventListener('manualUpdateCheck', handleManualUpdateCheck);
+    };
   }, []);
 
   const handleTileClick = (tile: Tile) => {
@@ -152,6 +160,16 @@ const GameContent: React.FC = () => {
     <div className={`min-h-screen p-4 transition-colors duration-300 ${
       isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-green-900 via-green-800 to-green-900'
     }`}>
+      {/* Manuel Güncelleme Kontrolü Butonu - Her zaman görünür */}
+      <div className="fixed top-4 left-4 z-50 bg-green-600 text-white p-2 rounded-lg shadow-lg">
+        <button
+          onClick={checkUpdates}
+          className="text-xs font-bold hover:bg-green-700 px-2 py-1 rounded transition-colors"
+        >
+          🔍 Güncelleme Kontrolü
+        </button>
+      </div>
+
       {/* FPS Göstergesi - Production ortamında görünür */}
       {import.meta.env.PROD && <FPSCounter position="bottom-right" />}
 
@@ -174,30 +192,6 @@ const GameContent: React.FC = () => {
           </div>
         )}
 
-        {/* Manuel Güncelleme Kontrolü Butonu - Debug için */}
-        {import.meta.env.DEV && (
-          <div className="fixed top-4 left-4 z-50 bg-blue-600 text-white p-2 rounded-lg shadow-lg">
-            <button
-              onClick={checkUpdates}
-              className="text-xs font-bold hover:bg-blue-700 px-2 py-1 rounded transition-colors"
-            >
-              🔍 Güncelleme Kontrolü
-            </button>
-          </div>
-        )}
-        {showMenu && (
-          <BeginMenu
-            setShowMenu={setShowMenu}
-            setGameState={setGameState}
-            onExit={() => window.close()}
-            onMultiplayer={() => setShowRoomSelection(true)}
-            onShowSettings={() => {
-              // TODO: Settings component eklenecek
-              console.log('Settings açılacak');
-            }}
-          />
-        )}
-
         {/* Oda Seçimi */}
         {showRoomSelection && (
           <RoomSelection
@@ -209,6 +203,15 @@ const GameContent: React.FC = () => {
             }}
           />
         )}
+
+      {/* Başlangıç Menüsü */}
+      {showMenu && (
+        <BeginMenu
+          setShowMenu={setShowMenu}
+          setGameState={setGameState}
+          onMultiplayer={() => setShowRoomSelection(true)}
+        />
+      )}
 
       {/* Ana Oyun */}
       {!showMenu && (
